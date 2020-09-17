@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <title>Three.js First Code</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script>
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+
+        //Adding Controls to the camera
+        constrols = new THREE.OrbitControls(camera, renderer.domElement)
+
+        //Creating Geometry
+        var geometry = new THREE.BoxGeometry(1, 1, 1);
+        var material = new THREE.MeshBasicMaterial({
+            color: 0x00ff00,
+            wireframe: true
+        });
+        var cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+        camera.position.z = 5;
+
+
+        //When Resizing the window and updating aspect ratio
+        //If we do not update aspect ration then it will distort geometry
+        window.addEventListener('resize', () => {
+            var width = window.innerWidth;
+            var height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
+        //Update Logic
+        var update = function() {
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+        };
+
+        //Draw Scene
+        var render = function() {
+            renderer.render(scene, camera);
+        };
+
+        //Run game loop (update render repeat)
+        var GameLoop = function() {
+            requestAnimationFrame(GameLoop);
+
+            update();
+            render();
+        }
+        GameLoop();
+    </script>
+</body>
+
+</html>
